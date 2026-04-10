@@ -14,7 +14,11 @@
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 
+#define BOARD_WIDTH 10
+#define BOARD_HEIGHT 20
+
 #define SCALE 3
+
 
 typedef struct  {
   TetData tet;
@@ -32,14 +36,18 @@ typedef struct {
 
 typedef struct {
   int score;
+  int drop_duration;
   Tet *curr_tet;
   Board *board;
 } Game;
 
 void move_tet(Game *game, int dir);
 void draw_board_borders(const Board *board);
-void draw_board(Game *game);
-void get_random_tet(TetData *tet); 
+void draw_board(const Board * board, const Tet *tet);
+
+TetData get_random_tet(); 
+
+void engine_update(Game *game);
 
 
 #endif /* _TETRIS_ENGINE_H */

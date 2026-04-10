@@ -16,7 +16,6 @@ int main()
   getkey();
 
 
-
   // Configure timer
   static volatile int tick = 1;
   int t = timer_configure(TIMER_ANY, ENGINE_TICK * 1000, GINT_CALL(callback_tick, &tick));
@@ -27,38 +26,57 @@ int main()
     return 1;
   }
 
-  // Initilization
-  int drop_duration = 1000;
-  Board board = { .w = 10, .h = 20, .x = (SCREEN_WIDTH / 2) - (10 / 2 * SCALE), .y = (SCREEN_HEIGHT / 2) - (20 / 2 * SCALE)};
-  Tet curr_tet = { .x = 2, .y = 2, .drop_duration = drop_duration};
-  get_random_tet(&curr_tet.tet);
-  Game game = { .board = &board, .score = 0, .curr_tet = &curr_tet};
+  // Init objects
+  Board board = { 
+    .w = BOARD_WIDTH, 
+    .h = BOARD_HEIGHT, 
+    .x = (SCREEN_WIDTH / 2) - (10 / 2 * SCALE), 
+    .y = (SCREEN_HEIGHT / 2) - (20 / 2 * SCALE)
+  };
+  bool data[board.w * board.h];
+  for(int i = 0; i < board.w * board.h; i++) {
+      data[i] = false;
+  }
+  board.data = data;
+
+  Tet curr_tet = { 
+    .x = 0, 
+    .y = 0, 
+    .tet = get_random_tet()
+  };
+
+  Game game = { 
+    .score = 0, 
+    .drop_duration = 1000,
+
+    .board = &board, 
+    .curr_tet = &curr_tet
+  };
 
 
   // Draw initial stuff
   draw_board_borders(&board);
-  draw_board(&game);
+  draw_board(&board, &curr_tet);
   dupdate();
 
+  // Main update loop
   while (1)
   {
     while (!tick)
       sleep();
     tick = 0;
 
-    draw_board(&game);
-    dupdate();
-
+    // Get user input
     int dir = get_inputs();
     if (dir >= 0) {
       move_tet(&game, dir);
     }
 
-    curr_tet.drop_duration -= ENGINE_TICK;
-    if(curr_tet.drop_duration <= 0) {
-      move_tet(&game, DIR_DOWN);
-      curr_tet.drop_duration = drop_duration;
-    }
+    engine_update(&game);
+
+    // Update screen
+    draw_board(&board, &curr_tet);
+    dupdate();
   }
 
   if (t >= 0)
