@@ -3,6 +3,8 @@
 
 #include "tetrominos.h"
 
+#define ENGINE_TICK 25
+
 /* Directions */
 #define DIR_DOWN 0
 #define DIR_RIGHT 1
@@ -17,6 +19,7 @@
 typedef struct  {
   TetData tet;
   int x, y;
+  int drop_duration;
 } Tet;
 
 

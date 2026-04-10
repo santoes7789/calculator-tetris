@@ -4,9 +4,6 @@
 #include "tetrominos.h"
 
 
-
-#include <gint/keyboard.h>
-
 void clear_board(const Board *board) {
   drect(
     board->x, 
@@ -45,7 +42,9 @@ void draw_board(Game *game) {
 
 void move_tet(Game *game, int dir) {
   int dx = (dir == DIR_RIGHT) - (dir == DIR_LEFT);
+  int dy = (dir == DIR_DOWN) - (dir == DIR_UP);
   game->curr_tet->x += dx;
+  game->curr_tet->y += dy;
 }
 
 // void rotate_tet(Game *game, int dir) {
@@ -65,3 +64,4 @@ void get_random_tet(TetData *tet) {
   int r = rand() & 7;
   *tet = tetrominos[r];
 }
+
