@@ -36,6 +36,7 @@ typedef struct {
 void move_tet(Game *game, int dir);
 void draw_board_borders(const Board *board);
 void draw_board(Game *game);
+void get_random_tet(TetData *tet); 
 
 
 #endif /* _TETRIS_ENGINE_H */

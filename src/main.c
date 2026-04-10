@@ -19,9 +19,11 @@ int main() {
   };
 
   Tet curr_tet = {
-    .x = 0,
-    .y = 0,
+    .x = 2,
+    .y = 2,
   };
+  
+  get_random_tet(&curr_tet.tet);
 
   Game game = {
     .board = &board,

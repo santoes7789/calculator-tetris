@@ -3,6 +3,10 @@
 #include "engine.h"
 #include "tetrominos.h"
 
+
+
+#include <gint/keyboard.h>
+
 void clear_board(const Board *board) {
   drect(
     board->x, 
@@ -13,6 +17,8 @@ void clear_board(const Board *board) {
 }
 
 void draw_block(int x, int y, const Board *board) {
+  if(x < 0 || y < 0 || x >= board->w || y >= board->h) return;
+
   drect(
     x*SCALE + board->x,
     y*SCALE + board->y,
@@ -26,7 +32,15 @@ void draw_board(Game *game) {
   clear_board(game->board);
   
   //2 steps, draw the active block, and then all the 'dead' blocks'
-  draw_block(game->curr_tet->x, game->curr_tet->y, game->board);
+  int index = 0;
+  for(int dy = 0; dy < game->curr_tet->tet.size; dy++) {
+    for(int dx = 0; dx < game->curr_tet->tet.size; dx++) {
+      if(game->curr_tet->tet.data[index]) {
+        draw_block(game->curr_tet->x + dx, game->curr_tet->y + dy, game->board);
+      }
+      index++;
+    }
+  }
 }
 
 void move_tet(Game *game, int dir) {
