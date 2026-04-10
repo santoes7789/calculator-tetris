@@ -11,23 +11,26 @@ int main() {
   getkey();
 
   // init basic thingies
-  Board board = {.w = 10, .h = 20};
+  Board board = {
+    .w = 10, 
+    .h = 20,
+    .x = (SCREEN_WIDTH/2) - (10/2 * SCALE),
+    .y = (SCREEN_HEIGHT/2) - (20/2 * SCALE)
+  };
 
-  Block curr_block = {
-    .block = SHAPE_L,
-    .x = 60,
-    .y = 20,
-    .rotation = 0
+  Tet curr_tet = {
+    .x = 0,
+    .y = 0,
   };
 
   Game game = {
     .board = &board,
     .score = 0, 
-    .curr_block = &curr_block
+    .curr_tet = &curr_tet
   };
 
 
-  draw_board_borders(&game);
+  draw_board_borders(&board);
   draw_board(&game);
   dupdate();
 
@@ -35,7 +38,7 @@ int main() {
     draw_board(&game);
     dupdate();
     int dir = get_inputs();
-    move_block(&game, dir);
+    move_tet(&game, dir);
   }
   
 
@@ -44,7 +47,7 @@ int main() {
 }
 
 static int get_inputs() {
-  int opt = GETKEY_DEFAULT & ~GETKEY_REP_ARROWS;
+  int opt = GETKEY_DEFAULT;
   while(1) {
     int key = getkey_opt(opt, NULL).key;
     if (key == KEY_RIGHT) return DIR_RIGHT;
