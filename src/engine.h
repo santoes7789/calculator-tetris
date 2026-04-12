@@ -19,7 +19,11 @@
 #define BOARD_WIDTH 10
 #define BOARD_HEIGHT 20
 
+#define UPPER_PADDING 2
+
 #define SCALE 3
+
+#define LINE_PTS 10
 
 
 typedef struct  {
@@ -40,6 +44,7 @@ typedef struct {
 typedef struct {
   int score;
   int drop_duration;
+  bool alive;
   Tet *curr_tet;
   Board *board;
 } Game;
@@ -50,11 +55,11 @@ TetData get_random_tet();
 void spawn_new_tet(Game *game);
 bool check_collision(const Tet *tet, const Board *board, int dx, int dy, int dr);
 
-void add_tet_to_board(const Tet *tet, Board *board);
+void add_tet_to_board(Game *game);
 bool move_tet(Game *game, int dir);
 void rotate_tet(Game *game);
 void hard_drop(Game *game);
 void engine_update(Game *game);
 
-void clear_full_lines(Board *board);
+void clear_full_lines(Game *game);
 #endif /* _TETRIS_ENGINE_H */

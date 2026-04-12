@@ -5,18 +5,23 @@
 #include "engine.h"
 #include "draw.h"
 
-static void draw_menu();
 static int get_inputs();
 static int callback_tick(volatile int *tick);
-
+static void start_game();
 
 int main()
 {
-  draw_menu();
-  dupdate();
-  getkey();
+  while(1) {
+    draw_menu();
+    dupdate();
+    getkey();
+    start_game();
+  }
 
+  return 0;
+}
 
+static void start_game() {
   // Configure timer
   static volatile int tick = 1;
   int t = timer_configure(TIMER_ANY, ENGINE_TICK * 1000, GINT_CALL(callback_tick, &tick));
@@ -24,7 +29,7 @@ int main()
     timer_start(t);
   }
   else {
-    return 1;
+    return;
   }
 
   // Init objects
@@ -34,19 +39,15 @@ int main()
     .x = (SCREEN_WIDTH / 2) - (10 / 2 * SCALE), 
     .y = (SCREEN_HEIGHT / 2) - (20 / 2 * SCALE)
   };
-  bool data[board.w * board.h];
-  for(int i = 0; i < board.w * board.h; i++) {
+  bool data[board.w * (board.h + UPPER_PADDING)];
+  for(int i = 0; i < board.w * (board.h + UPPER_PADDING); i++) {
       data[i] = false;
   }
   board.data = data;
 
-  Tet curr_tet = { 
-    .x = 0, 
-    .y = 0, 
-    .tet = get_random_tet()
-  };
-
+  Tet curr_tet;
   Game game = { 
+    .alive = true,
     .score = 0, 
     .drop_duration = 350,
 
@@ -54,6 +55,7 @@ int main()
     .curr_tet = &curr_tet
   };
 
+  spawn_new_tet(&game);
 
   // Draw initial stuff
   draw_board_borders(&board);
@@ -61,12 +63,16 @@ int main()
   dupdate();
 
   // Main update loop
-  while (1)
-  {
+  while (1) {
     while (!tick)
       sleep();
     tick = 0;
 
+    if(!game.alive) {
+      draw_game_over(&game);
+      dupdate();
+      break;
+    } 
     // Get user input
     int dir = get_inputs();
     
@@ -87,11 +93,11 @@ int main()
     // Update screen
     draw_board(&board, &curr_tet);
     dupdate();
+    
   }
-
   if (t >= 0)
     timer_stop(t);
-  return 1;
+  getkey();
 }
 
 static int get_inputs(void)
@@ -117,14 +123,6 @@ static int get_inputs(void)
     if (key == KEY_DOT)
       return ACTION_HARDDROP;
   }
-}
-
-static void draw_menu()
-{
-  dclear(C_WHITE);
-  dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 10, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_CENTER, "TETRIS GAME");
-  dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_CENTER, "Press any key");
-  dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 10, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_CENTER, "to start!");
 }
 
 static int callback_tick(volatile int *tick)
