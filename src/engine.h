@@ -5,14 +5,13 @@
 
 #define ENGINE_TICK 25
 
-/* Directions */
-#define DIR_DOWN 0
-#define DIR_RIGHT 1
-#define DIR_UP 2
-#define DIR_LEFT 3
+/* Actions */
+#define ACTION_DOWN 0
+#define ACTION_RIGHT 1
+#define ACTION_LEFT 2
 
-#define KEY_ROTATE 4
-#define KEY_HARD_DROP 5
+#define ACTION_HARDDROP 3
+#define ACTION_ROTATE 4
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
@@ -26,6 +25,7 @@
 typedef struct  {
   TetData tet;
   int x, y;
+  int rotation;
   int drop_duration;
 } Tet;
 
@@ -45,6 +45,8 @@ typedef struct {
 } Game;
 
 void move_tet(Game *game, int dir);
+void rotate_tet(Game *game);
+
 void draw_board_borders(const Board *board);
 void draw_board(const Board * board, const Tet *tet);
 

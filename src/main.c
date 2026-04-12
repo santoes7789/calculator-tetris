@@ -68,8 +68,13 @@ int main()
 
     // Get user input
     int dir = get_inputs();
-    if (dir >= 0) {
+    
+    //Movement
+    if (dir >= ACTION_DOWN && dir <= ACTION_LEFT) {
       move_tet(&game, dir);
+    } 
+    if (dir == ACTION_ROTATE) {
+      rotate_tet(&game);
     }
 
     engine_update(&game);
@@ -97,13 +102,13 @@ static int get_inputs(void)
 
     int key = ev.key;
     if (key == KEY_RIGHT)
-      return DIR_RIGHT;
+      return ACTION_RIGHT;
     if (key == KEY_LEFT)
-      return DIR_LEFT;
+      return ACTION_LEFT;
     if (key == KEY_DOWN)
-      return DIR_DOWN;
-    if (key == KEY_0)
-      return KEY_ROTATE;
+      return ACTION_DOWN;
+    if (key == KEY_UP)
+      return ACTION_ROTATE;
   }
 }
 

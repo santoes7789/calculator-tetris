@@ -12,6 +12,7 @@
 
 typedef struct {
     int size;
+    int name;
     bool data[16];
 } TetData;
 
