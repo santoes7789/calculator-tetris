@@ -51,8 +51,9 @@ void spawn_new_tet(Game *game);
 bool check_collision(const Tet *tet, const Board *board, int dx, int dy, int dr);
 
 void add_tet_to_board(const Tet *tet, Board *board);
-void move_tet(Game *game, int dir);
+bool move_tet(Game *game, int dir);
 void rotate_tet(Game *game);
+void hard_drop(Game *game);
 void engine_update(Game *game);
 
 void clear_full_lines(Board *board);

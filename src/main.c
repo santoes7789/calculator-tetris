@@ -78,6 +78,10 @@ int main()
       rotate_tet(&game);
     }
 
+    if (dir == ACTION_HARDDROP) {
+      hard_drop(&game);
+    }
+
     engine_update(&game);
 
     // Update screen
@@ -110,6 +114,8 @@ static int get_inputs(void)
       return ACTION_DOWN;
     if (key == KEY_0)
       return ACTION_ROTATE;
+    if (key == KEY_DOT)
+      return ACTION_HARDDROP;
   }
 }
 

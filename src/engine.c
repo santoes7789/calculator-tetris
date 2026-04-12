@@ -136,7 +136,7 @@ void clear_full_lines(Board *board) {
   }
 }
 
-void move_tet(Game *game, int dir) {
+bool move_tet(Game *game, int dir) {
   int dx = (dir == ACTION_RIGHT) - (dir == ACTION_LEFT);
   int dy = (dir == ACTION_DOWN);
 
@@ -145,11 +145,24 @@ void move_tet(Game *game, int dir) {
       add_tet_to_board(game->curr_tet, game->board);
       spawn_new_tet(game);
     }
+    return false;
   }
   else {
     game->curr_tet->x += dx;
     game->curr_tet->y += dy;
+    return true;
   }
+}
+
+void hard_drop(Game *game) {
+  int count;
+  while(move_tet(game, ACTION_DOWN)){
+    //Break if it reaches infinite loop
+    if(count > game->board->h*2) {
+      break;
+    }
+  }
+
 }
 
 void rotate_tet(Game *game) {
