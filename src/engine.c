@@ -100,6 +100,40 @@ void add_tet_to_board(const Tet *tet, Board *board) {
       index++;
     }
   }
+
+  clear_full_lines(board);
+
+
+}
+
+void clear_line(int y, Board *board) {
+  for(int x = 0; x < board->w; x++) {
+    board->data[x + (y * board->w)] = false;
+  }
+  for(int i = y; i > 0; i--) {
+    for(int x = 0; x < board->w; x++) {
+      board->data[x + (i * board->w)] = board->data[x + ((i - 1) * board->w)];
+    }
+  }
+  for(int x = 0; x < board->w; x++) {
+    board->data[x] = false;
+  }
+}
+
+void clear_full_lines(Board *board) {
+  for(int y = 0; y < board->h; y++) {
+    bool clear = true;
+    for(int x = 0; x < board->w; x++) {
+      if(!board->data[x + (y * board->w)]) {
+        clear = false;
+        break;
+      }
+    }
+
+    if(clear) {
+      clear_line(y, board);
+    }
+  }
 }
 
 void move_tet(Game *game, int dir) {

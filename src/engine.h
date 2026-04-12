@@ -55,4 +55,5 @@ void move_tet(Game *game, int dir);
 void rotate_tet(Game *game);
 void engine_update(Game *game);
 
+void clear_full_lines(Board *board);
 #endif /* _TETRIS_ENGINE_H */
