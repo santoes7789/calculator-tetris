@@ -122,9 +122,9 @@ static int get_inputs(void)
 static void draw_menu()
 {
   dclear(C_WHITE);
-  dtext(1, 1, C_BLACK, "TETRIS GAME!");
-  dtext(1, 9, C_BLACK, "Press any key");
-  dtext(1, 18, C_BLACK, "to start!");
+  dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 10, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_CENTER, "TETRIS GAME");
+  dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_CENTER, "Press any key");
+  dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 10, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_CENTER, "to start!");
 }
 
 static int callback_tick(volatile int *tick)
