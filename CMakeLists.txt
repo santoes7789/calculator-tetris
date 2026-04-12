@@ -22,11 +22,12 @@ set(ASSETS
   # ...
 )
 set(ASSETS_fx
-  assets-fx/example.png
+  assets-fx/title.png
+  assets-fx/better_font.png
+  assets-fx/santoso_logo.png
   # ...
 )
 set(ASSETS_cg
-  assets-cg/example.png
   # ...
 )
 

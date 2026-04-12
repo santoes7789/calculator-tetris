@@ -11,6 +11,16 @@ static void start_game();
 
 int main()
 {
+  extern font_t better_font;
+  extern bopti_image_t img_logo; 
+  dfont(&better_font); 
+
+  dclear(C_WHITE);
+  dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 13, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_CENTER, "Produced by the one and only");
+  dimage(22, SCREEN_HEIGHT/2 - 7, &img_logo);
+  dupdate();
+  getkey();
+
   while(1) {
     draw_menu();
     dupdate();
