@@ -38,9 +38,11 @@ TetData get_random_tet() {
   return tetrominos[r];
 }
 
-int y_spawn = -2;
 void spawn_new_tet(Game *game) {
+  int y_spawn = -2;
+  int x_spawn = game->board->w/2 - 1;
   game->curr_tet->y = y_spawn;
+  game->curr_tet->x = x_spawn;
   game->curr_tet->tet = get_random_tet();
 }
 
@@ -62,6 +64,11 @@ void draw_block(int x, int y, const Board *board) {
       x * SCALE + board->x + SCALE - 1,
       y * SCALE + board->y + SCALE - 1,
       C_BLACK);
+
+  dpixel(
+    x * SCALE + board->x + 1,
+    y * SCALE + board->y + 1,
+    C_WHITE);
 }
 
 void draw_board(const Board *board, const Tet *tet) {

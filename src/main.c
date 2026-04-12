@@ -107,7 +107,7 @@ static int get_inputs(void)
       return ACTION_LEFT;
     if (key == KEY_DOWN)
       return ACTION_DOWN;
-    if (key == KEY_UP)
+    if (key == KEY_0)
       return ACTION_ROTATE;
   }
 }
