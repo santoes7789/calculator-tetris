@@ -11,6 +11,9 @@
 #define DIR_UP 2
 #define DIR_LEFT 3
 
+#define KEY_ROTATE 4
+#define KEY_HARD_DROP 5
+
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 

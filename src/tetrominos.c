@@ -8,5 +8,5 @@ const TetData tetrominos[7] = {
     [3] = {.size = 3, .data = {true, true, false, false, true, true, false, false, false, false, false, false}}, // Z
     [4] = {.size = 3, .data = {true, true, true, false, true, false, false, false, false, false, false, false}}, // T
     [5] = {.size = 3, .data = {true, true, false, true, true, false, false, false, false, false, false, false}}, // O
-    [6] = {.size = 4, .data = {true, true, true, true, false, false, false, false, false, false, false, false}} // L
+    [6] = {.size = 4, .data = {true, true, true, true, false, false, false, false, false, false, false, false}} // I
 };

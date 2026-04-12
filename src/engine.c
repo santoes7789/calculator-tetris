@@ -3,6 +3,17 @@
 #include "engine.h"
 #include "tetrominos.h"
 
+TetData get_random_tet() {
+  int r = rand() % 7;
+  return tetrominos[r];
+}
+
+int y_spawn = -2;
+void spawn_new_tet(Game * game) {
+  game->curr_tet->y = y_spawn;
+  game->curr_tet->tet = get_random_tet(); 
+}
+
 void clear_board(const Board *board) {
   drect(
     board->x, 
@@ -58,17 +69,16 @@ void draw_board_borders(const Board *board) {
     C_WHITE, 1, C_BLACK);
 }
 
-TetData get_random_tet() {
-  int r = rand() & 7;
-  return tetrominos[r];
-}
 
 // Checks whether the tet moved by dx and dy will collide with anything
 bool check_collision(const Tet *tet, const Board *board, int dx, int dy) {
   int index = 0;
   for(int y = 0; y < tet->tet.size; y++) {
     for(int x = 0; x < tet->tet.size; x++) { 
-      if(!tet->tet.data[index]) continue;
+      if(!tet->tet.data[index]) {
+        index++;
+        continue;
+      }
 
 
       int board_x = tet->x + x + dx;
@@ -82,7 +92,7 @@ bool check_collision(const Tet *tet, const Board *board, int dx, int dy) {
          }
 
       // Checking board
-      if(board->data[board_x + (board_y * board->w)]) {
+      if(board_y >=0 && board->data[board_x + (board_y * board->w)]) {
         return true;
       }
 
@@ -115,7 +125,7 @@ void move_tet(Game *game, int dir) {
   if(check_collision(game->curr_tet, game->board, dx, dy)) {
     if(dy) {
       add_tet_to_board(game->curr_tet, game->board);
-      game->curr_tet->y = 0;
+      spawn_new_tet(game);
     }
   } else {
     game->curr_tet->x += dx;

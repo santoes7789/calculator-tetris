@@ -47,7 +47,7 @@ int main()
 
   Game game = { 
     .score = 0, 
-    .drop_duration = 1000,
+    .drop_duration = 350,
 
     .board = &board, 
     .curr_tet = &curr_tet
@@ -100,6 +100,10 @@ static int get_inputs(void)
       return DIR_RIGHT;
     if (key == KEY_LEFT)
       return DIR_LEFT;
+    if (key == KEY_DOWN)
+      return DIR_DOWN;
+    if (key == KEY_0)
+      return KEY_ROTATE;
   }
 }
 
