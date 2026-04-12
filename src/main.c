@@ -3,6 +3,7 @@
 #include <gint/timer.h>
 #include <gint/clock.h>
 #include "engine.h"
+#include "draw.h"
 
 static void draw_menu();
 static int get_inputs();

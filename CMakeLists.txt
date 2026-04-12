@@ -14,6 +14,7 @@ set(SOURCES
   src/main.c
   src/engine.c
   src/tetrominos.c
+  src/draw.c
   # ...
 )
 # Shared assets, fx-9860G-only assets and fx-CG-50-only assets

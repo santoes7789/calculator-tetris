@@ -44,15 +44,15 @@ typedef struct {
   Board *board;
 } Game;
 
+
+bool get_i_block(const Tet *tet, int index);
+TetData get_random_tet();
+void spawn_new_tet(Game *game);
+bool check_collision(const Tet *tet, const Board *board, int dx, int dy, int dr);
+
+void add_tet_to_board(const Tet *tet, Board *board);
 void move_tet(Game *game, int dir);
 void rotate_tet(Game *game);
-
-void draw_board_borders(const Board *board);
-void draw_board(const Board * board, const Tet *tet);
-
-TetData get_random_tet(); 
-
 void engine_update(Game *game);
-
 
 #endif /* _TETRIS_ENGINE_H */

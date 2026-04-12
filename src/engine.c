@@ -6,6 +6,7 @@
 // Order in which blocks should be read based on rotation
 static const int s_three_rotated[9] = {6, 3, 0, 7, 4, 1, 8, 5, 2};
 static const int s_four_rotated[16] = {12, 8, 4, 0, 13, 9, 5, 1, 14, 10, 6, 2, 15, 11, 7, 3};
+
 bool get_i_block(const Tet *tet, int index) {
   int i;
   if (tet->rotation == 0){
@@ -46,64 +47,6 @@ void spawn_new_tet(Game *game) {
   game->curr_tet->tet = get_random_tet();
 }
 
-void clear_board(const Board *board) {
-  drect(
-      board->x,
-      board->y,
-      board->x + board->w * SCALE - 1,
-      board->y + board->h * SCALE - 1, C_WHITE);
-}
-
-void draw_block(int x, int y, const Board *board) {
-  if (x < 0 || y < 0 || x >= board->w || y >= board->h)
-    return;
-
-  drect(
-      x * SCALE + board->x,
-      y * SCALE + board->y,
-      x * SCALE + board->x + SCALE - 1,
-      y * SCALE + board->y + SCALE - 1,
-      C_BLACK);
-
-  dpixel(
-    x * SCALE + board->x + 1,
-    y * SCALE + board->y + 1,
-    C_WHITE);
-}
-
-void draw_board(const Board *board, const Tet *tet) {
-  clear_board(board);
-
-  // Draw the active block
-  int index = 0;
-  for (int dy = 0; dy < tet->tet.size; dy++) {
-    for (int dx = 0; dx < tet->tet.size; dx++) {
-      if (get_i_block(tet, index)) {
-        draw_block(tet->x + dx, tet->y + dy, board);
-      }
-      index++;
-    }
-  }
-
-  // Draw rest of the board
-  for (int y = 0; y < board->h; y++) {
-    for (int x = 0; x < board->w; x++) {
-      if (board->data[x + (y * board->w)]) {
-        draw_block(x, y, board);
-      }
-    }
-  }
-}
-
-void draw_board_borders(const Board *board) {
-  dclear(C_WHITE);
-  drect_border(
-      board->x - 1,
-      board->y - 1,
-      board->x + board->w * SCALE,
-      board->y + board->h * SCALE,
-      C_WHITE, 1, C_BLACK);
-}
 
 // Checks whether the tet moved by dx and dy will collide with anything
 bool check_collision(const Tet *tet, const Board *board, int dx, int dy, int dr) {
