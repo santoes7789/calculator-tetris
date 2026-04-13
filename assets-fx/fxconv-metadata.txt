@@ -13,3 +13,31 @@ better_font.png:
   grid.padding: 1
   proportional: true
   name: better_font
+
+tetrominoes_I.png:
+  type: bopti-image
+  name: img_I_piece
+
+tetrominoes_O.png:
+  type: bopti-image
+  name: img_O_piece
+
+tetrominoes_J.png:
+  type: bopti-image
+  name: img_J_piece
+
+tetrominoes_L.png:
+  type: bopti-image
+  name: img_L_piece
+
+tetrominoes_S.png:
+  type: bopti-image
+  name: img_S_piece
+
+tetrominoes_Z.png:
+  type: bopti-image
+  name: img_Z_piece
+
+tetrominoes_T.png:
+  type: bopti-image
+  name: img_T_piece

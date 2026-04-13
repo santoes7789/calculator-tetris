@@ -25,6 +25,13 @@ set(ASSETS_fx
   assets-fx/title.png
   assets-fx/better_font.png
   assets-fx/santoso_logo.png
+  assets-fx/tetrominoes_I.png
+  assets-fx/tetrominoes_J.png
+  assets-fx/tetrominoes_L.png
+  assets-fx/tetrominoes_O.png
+  assets-fx/tetrominoes_S.png
+  assets-fx/tetrominoes_T.png
+  assets-fx/tetrominoes_Z.png
   # ...
 )
 set(ASSETS_cg

@@ -52,7 +52,6 @@ void draw_board(const Board *board, const Tet *tet) {
 }
 
 void draw_board_borders(const Board *board) {
-  dclear(C_WHITE);
   drect_border(
       board->x - 1,
       board->y - 1,
@@ -76,8 +75,12 @@ void draw_game_over(const Game *game) {
 
 }
 
-void draw_menu()
-{
+void draw_next_tet(int x, int y, bopti_image_t *img) {
+  dtext(x, y, C_BLACK, "next:");
+  dimage(x + 2, y + 7, img);
+}
+
+void draw_menu() {
   extern bopti_image_t img_title; 
   dclear(C_WHITE);
   dimage(0, 0, &img_title);

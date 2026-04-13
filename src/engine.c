@@ -34,23 +34,26 @@ bool get_i_block(const Tet *tet, int index) {
   return tet->tet.data[i];
 }
 
-TetData get_random_tet() {
-  int r = rand() % 7;
-  return tetrominos[r];
+int get_random_tet() {
+  return rand() % 7;
 }
 
-void spawn_new_tet(Game *game) {
+
+void spawn_next_tet(Game *game) {
   int y_spawn = 0;
   int x_spawn = game->board->w/2 - 1;
-  game->curr_tet->tet = get_random_tet();
+  game->curr_tet->tet = tetrominos[game->next_tet];
   game->curr_tet->y = y_spawn;
   game->curr_tet->x = x_spawn;
   game->curr_tet->rotation = 0;
+
+  game->next_tet = get_random_tet();
 
   if(check_collision(game->curr_tet, game->board, 0, 0, 0)){
     game->alive = false;
   }
 }
+
 
 
 // Checks whether the tet moved by dx and dy will collide with anything
@@ -139,22 +142,21 @@ void clear_full_lines(Game *game) {
   }
 }
 
+// returns false if tet has hit the ground
 bool move_tet(Game *game, int dir) {
   int dx = (dir == ACTION_RIGHT) - (dir == ACTION_LEFT);
   int dy = (dir == ACTION_DOWN);
 
   if (check_collision(game->curr_tet, game->board, dx, dy, 0)) {
     if (dy) {
-      add_tet_to_board(game);
-      spawn_new_tet(game);
+      return false;
     }
-    return false;
   }
   else {
     game->curr_tet->x += dx;
     game->curr_tet->y += dy;
-    return true;
   }
+  return true;
 }
 
 void hard_drop(Game *game) {
@@ -176,12 +178,13 @@ void rotate_tet(Game *game) {
     game->curr_tet->rotation = (game->curr_tet->rotation + 1) % 4;
   }
 }
-
-void engine_update(Game *game) {
-  // Gravity
+// returns false if tet has hit the ground
+bool apply_gravity(Game *game) {
   game->curr_tet->drop_duration -= ENGINE_TICK;
   if (game->curr_tet->drop_duration <= 0) {
-    move_tet(game, ACTION_DOWN);
     game->curr_tet->drop_duration = game->drop_duration;
+    return move_tet(game, ACTION_DOWN);
   }
+
+  return true; 
 }

@@ -8,11 +8,15 @@
 static int get_inputs();
 static int callback_tick(volatile int *tick);
 static void start_game();
+static void on_piece_drop(Game * game);
 
 int main()
 {
   extern font_t better_font;
   extern bopti_image_t img_logo; 
+  
+
+
   dfont(&better_font); 
 
   dclear(C_WHITE);
@@ -60,15 +64,21 @@ static void start_game() {
     .alive = true,
     .score = 0, 
     .drop_duration = 350,
+    .next_tet = get_random_tet(),
 
     .board = &board, 
     .curr_tet = &curr_tet
   };
 
-  spawn_new_tet(&game);
+  spawn_next_tet(&game);
+
 
   // Draw initial stuff
+  dclear(C_WHITE);
   draw_board_borders(&board);
+  int next_tet_x = board.x + board.w * SCALE + 5;
+  int next_tet_y = 3;
+  draw_next_tet(next_tet_x, next_tet_y, tetrominos[game.next_tet].img);
   draw_board(&board, &curr_tet);
   dupdate();
 
@@ -89,6 +99,7 @@ static void start_game() {
     //Movement
     if (dir >= ACTION_DOWN && dir <= ACTION_LEFT) {
       move_tet(&game, dir);
+
     } 
     if (dir == ACTION_ROTATE) {
       rotate_tet(&game);
@@ -96,9 +107,12 @@ static void start_game() {
 
     if (dir == ACTION_HARDDROP) {
       hard_drop(&game);
+      on_piece_drop(&game);
     }
 
-    engine_update(&game);
+    if(!apply_gravity(&game)){
+      on_piece_drop(&game);
+    }
 
     // Update screen
     draw_board(&board, &curr_tet);
@@ -108,6 +122,12 @@ static void start_game() {
   if (t >= 0)
     timer_stop(t);
   getkey();
+}
+
+static void on_piece_drop(Game *game) {
+  add_tet_to_board(game);
+  spawn_next_tet(game);
+  draw_next_tet(game->board->x + game->board->w * SCALE + 5, 3, tetrominos[game->next_tet].img);
 }
 
 static int get_inputs(void)

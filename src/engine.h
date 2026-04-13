@@ -46,20 +46,21 @@ typedef struct {
   int drop_duration;
   bool alive;
   Tet *curr_tet;
+  int next_tet;
   Board *board;
 } Game;
 
 
 bool get_i_block(const Tet *tet, int index);
-TetData get_random_tet();
-void spawn_new_tet(Game *game);
+int get_random_tet();
+void spawn_next_tet(Game *game);
 bool check_collision(const Tet *tet, const Board *board, int dx, int dy, int dr);
 
 void add_tet_to_board(Game *game);
 bool move_tet(Game *game, int dir);
 void rotate_tet(Game *game);
 void hard_drop(Game *game);
-void engine_update(Game *game);
+bool apply_gravity(Game *game);
 
 void clear_full_lines(Game *game);
 #endif /* _TETRIS_ENGINE_H */
