@@ -2,6 +2,8 @@
 #include <gint/keyboard.h>
 #include <gint/timer.h>
 #include <gint/clock.h>
+#include <time.h>
+#include <stdlib.h>
 #include "engine.h"
 #include "draw.h"
 
@@ -14,7 +16,7 @@ int main()
 {
   extern font_t better_font;
   extern bopti_image_t img_logo; 
-  
+  srand(time(NULL));
 
 
   dfont(&better_font); 
