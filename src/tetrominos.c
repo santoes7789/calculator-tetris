@@ -5,7 +5,7 @@ const TetData tetrominos[7] = {
     [0] = {
         .size = 3, 
         .name = SHAPE_L, 
-        .img = &img_I_piece,
+        .img = &img_L_piece,
         .data = {false, false, true, true, true, true, false, false, false, false, false, false}},
 
     [1] = {
