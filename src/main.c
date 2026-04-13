@@ -28,7 +28,6 @@ int main()
   while(1) {
     draw_menu();
     dupdate();
-    sleep_ms(1000);
     getkey();
     start_game();
   }
@@ -124,6 +123,7 @@ static void start_game() {
     timer_stop(t);
 
   sleep_ms(1500);
+  clearevents();
   getkey();
 }
 
