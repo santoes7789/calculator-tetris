@@ -70,8 +70,8 @@ void draw_game_over(const Game *game) {
       SCREEN_HEIGHT/2 + window_h/2,
       C_WHITE, 1, C_BLACK);
 
-  dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 5, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_CENTER, "GAME OVER!");
-  dprint_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 5, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_CENTER, "score: %d", game->score);
+  dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 5, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_MIDDLE, "GAME OVER!");
+  dprint_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 5, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_MIDDLE, "score: %d", game->score);
 
 }
 
@@ -80,10 +80,18 @@ void draw_next_tet(int x, int y, bopti_image_t *img) {
   dimage(x + 2, y + 7, img);
 }
 
+void draw_score(int x, int y, int score) {
+  // dtext(x, y, C_BLACK, "score:");
+  // dprint(x + 2, y + 7, C_BLACK, "%d", score);
+  dtext_opt(x, y, C_BLACK, C_NONE, DTEXT_LEFT, DTEXT_TOP, "score:");
+  dprint_opt(x, y + 7, C_BLACK, C_NONE, DTEXT_LEFT, DTEXT_TOP, "%d", score);
+
+}
+
 void draw_menu() {
   extern bopti_image_t img_title; 
   dclear(C_WHITE);
   dimage(0, 0, &img_title);
-  dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 13, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_CENTER, "Press any key");
-  dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 23, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_CENTER, "to start!");
+  dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 13, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_MIDDLE, "Press any key");
+  dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 23, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_MIDDLE, "to start!");
 }
