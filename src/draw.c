@@ -75,21 +75,30 @@ void draw_game_over(const Game *game) {
 
 }
 
-void draw_next_tet(int x, int y, bopti_image_t *img) {
-  dtext(x, y, C_BLACK, "next:");
-  dimage(x + 2, y + 7, img);
+void draw_static_ui(const Game *game) {
+  int next_tet_x = game->board->x + game->board->w * SCALE + 5;
+  int next_tet_y = 3;
+  dtext(next_tet_x, next_tet_y, C_BLACK, "next:");
+
+  int score_x = 5;
+  int score_y = 3;
+  dtext(score_x, score_y, C_BLACK, "score:");
 }
 
-void draw_score(int x, int y, int score) {
-  // dtext(x, y, C_BLACK, "score:");
-  // dprint(x + 2, y + 7, C_BLACK, "%d", score);
-  dtext_opt(x, y, C_BLACK, C_NONE, DTEXT_LEFT, DTEXT_TOP, "score:");
-  dprint_opt(x, y + 7, C_BLACK, C_NONE, DTEXT_LEFT, DTEXT_TOP, "%d", score);
 
+void draw_ui(const Game *game) {
+  int next_tet_x = game->board->x + game->board->w * SCALE + 5;
+  int next_tet_y = 3;
+  dimage(next_tet_x + 2, next_tet_y + 7, tetrominos[game->next_tet].img);
+
+  int score_x = 5;
+  int score_y = 3;
+  drect(score_x + 2, score_y + 7, game->board->x - 2, score_y + 20, C_WHITE);
+  dprint(score_x + 2, score_y + 7, C_BLACK, "%d", game->score);
 }
 
 void draw_menu() {
-  extern bopti_image_t img_title; 
+  extern bopti_image_t img_title;
   dclear(C_WHITE);
   dimage(0, 0, &img_title);
   dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 13, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_MIDDLE, "Press any key");

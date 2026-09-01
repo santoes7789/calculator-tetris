@@ -15,11 +15,11 @@ static void on_piece_drop(Game * game);
 int main()
 {
   extern font_t better_font;
-  extern bopti_image_t img_logo; 
+  extern bopti_image_t img_logo;
   srand(time(NULL));
 
 
-  dfont(&better_font); 
+  dfont(&better_font);
 
   dclear(C_WHITE);
   dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 13, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_CENTER, "Produced by the one and only");
@@ -49,10 +49,10 @@ static void start_game() {
   }
 
   // Init objects
-  Board board = { 
-    .w = BOARD_WIDTH, 
-    .h = BOARD_HEIGHT, 
-    .x = (SCREEN_WIDTH / 2) - (10 / 2 * SCALE), 
+  Board board = {
+    .w = BOARD_WIDTH,
+    .h = BOARD_HEIGHT,
+    .x = (SCREEN_WIDTH / 2) - (10 / 2 * SCALE),
     .y = (SCREEN_HEIGHT / 2) - (20 / 2 * SCALE)
   };
   bool data[board.w * (board.h + UPPER_PADDING)];
@@ -62,13 +62,13 @@ static void start_game() {
   board.data = data;
 
   Tet curr_tet;
-  Game game = { 
+  Game game = {
     .alive = true,
-    .score = 0, 
+    .score = 0,
     .drop_duration = 350,
     .next_tet = get_random_tet(),
 
-    .board = &board, 
+    .board = &board,
     .curr_tet = &curr_tet
   };
 
@@ -78,12 +78,10 @@ static void start_game() {
   // Draw initial stuff
   dclear(C_WHITE);
   draw_board_borders(&board);
-  draw_next_tet(board.x + board.w * SCALE + 5, 3, tetrominos[game.next_tet].img);
-  // draw_score(5, 3, game.score);
   draw_board(&board, &curr_tet);
+  draw_static_ui(&game);
+  draw_ui(&game);
   dupdate();
-
-  int test = 1000;
 
   // Main update loop
   while (1) {
@@ -95,15 +93,15 @@ static void start_game() {
       draw_game_over(&game);
       dupdate();
       break;
-    } 
+    }
     // Get user input
     int dir = get_inputs();
-    
+
     //Movement
     if (dir >= ACTION_DOWN && dir <= ACTION_LEFT) {
       move_tet(&game, dir);
 
-    } 
+    }
     if (dir == ACTION_ROTATE) {
       rotate_tet(&game);
     }
@@ -116,26 +114,15 @@ static void start_game() {
     bool hit = apply_gravity(&game);
 
     if(!hit){
-      dpixel(1, 0, C_BLACK);
-      test = 1000;
       on_piece_drop(&game);
-    } else {
-      dpixel(1, 0, C_WHITE);
-    }
-
-    test -= ENGINE_TICK;
-    if(test <= 0) {
-      dpixel(0, 0, C_WHITE);
-    } else {
-      dpixel(0, 0, C_BLACK);
-
     }
 
     // Update screen
     draw_board(&board, &curr_tet);
     dupdate();
-    
   }
+
+
   if (t >= 0)
     timer_stop(t);
 
@@ -147,12 +134,10 @@ static void start_game() {
 static void on_piece_drop(Game *game) {
   add_tet_to_board(game);
   spawn_next_tet(game);
-  draw_next_tet(game->board->x + game->board->w * SCALE + 5, 3, tetrominos[game->next_tet].img);
-  // draw_next_tet(game->board->x + game->board->w * SCALE + 5, 3, tetrominos[game->next_tet].img);
-  // int x = 5, y = 3;
-  // dtext_opt(x, y, C_BLACK, C_NONE, DTEXT_LEFT, DTEXT_TOP, "score:");
-  // dprint_opt(x, y + 7, C_BLACK, C_NONE, DTEXT_LEFT, DTEXT_TOP, "%d", game->score);
+  draw_ui(game);
 }
+
+
 
 static int get_inputs(void)
 {

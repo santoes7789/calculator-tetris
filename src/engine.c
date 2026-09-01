@@ -112,9 +112,6 @@ void add_tet_to_board(Game *game) {
 }
 
 void clear_line(int y, Game *game) {
-  for(int x = 0; x < game->board->w; x++) {
-    game->board->data[x + (y * game->board->w)] = false;
-  }
   for(int i = y; i > 0; i--) {
     for(int x = 0; x < game->board->w; x++) {
       game->board->data[x + (i * game->board->w)] = game->board->data[x + ((i - 1) * game->board->w)];
@@ -122,10 +119,11 @@ void clear_line(int y, Game *game) {
   }
   for(int x = 0; x < game->board->w; x++) {
     game->board->data[x] = false;
-    game->score += LINE_PTS;
   }
+  game->score += LINE_PTS;
 }
 
+// Checks for lines that are full and clears them.
 void clear_full_lines(Game *game) {
   for(int y = 0; y < game->board->h + UPPER_PADDING; y++) {
     bool clear = true;
@@ -160,7 +158,7 @@ bool move_tet(Game *game, int dir) {
 }
 
 void hard_drop(Game *game) {
-  int count;
+  int count = 0;
   while(move_tet(game, ACTION_DOWN)){
     //Break if it reaches infinite loop
     if(count > game->board->h*2) {
@@ -173,7 +171,7 @@ void hard_drop(Game *game) {
 void rotate_tet(Game *game) {
   if (game->curr_tet->tet.name == SHAPE_O)
     return;
-  
+
   if(!check_collision(game->curr_tet, game->board, 0, 0, 1)) {
     game->curr_tet->rotation = (game->curr_tet->rotation + 1) % 4;
   }
@@ -186,5 +184,5 @@ bool apply_gravity(Game *game) {
     return move_tet(game, ACTION_DOWN);
   }
 
-  return true; 
+  return true;
 }
