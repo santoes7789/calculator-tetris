@@ -48,6 +48,7 @@ typedef struct {
   Tet *curr_tet;
   int next_tet;
   Board *board;
+  int level;
 } Game;
 
 

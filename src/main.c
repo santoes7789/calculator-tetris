@@ -4,6 +4,7 @@
 #include <gint/clock.h>
 #include <time.h>
 #include <stdlib.h>
+#include <string.h>
 #include "engine.h"
 #include "draw.h"
 
@@ -56,20 +57,19 @@ static void start_game() {
     .y = (SCREEN_HEIGHT / 2) - (20 / 2 * SCALE)
   };
   bool data[board.w * (board.h + UPPER_PADDING)];
-  for(int i = 0; i < board.w * (board.h + UPPER_PADDING); i++) {
-      data[i] = false;
-  }
+  memset(data, 0, board.w * (board.h + UPPER_PADDING)); // clear board
   board.data = data;
 
   Tet curr_tet;
   Game game = {
     .alive = true,
     .score = 0,
-    .drop_duration = 350,
+    .drop_duration = 400,
     .next_tet = get_random_tet(),
 
     .board = &board,
-    .curr_tet = &curr_tet
+    .curr_tet = &curr_tet,
+    .level = 1,
   };
 
   spawn_next_tet(&game);
@@ -108,7 +108,7 @@ static void start_game() {
 
     if (dir == ACTION_HARDDROP) {
       hard_drop(&game);
-      on_piece_drop(&game);
+      on_piece_drop(&game); // instantly cause piece to drop
     }
 
     bool hit = apply_gravity(&game);
@@ -136,7 +136,6 @@ static void on_piece_drop(Game *game) {
   spawn_next_tet(game);
   draw_ui(game);
 }
-
 
 
 static int get_inputs(void)

@@ -1,5 +1,6 @@
 #include <gint/display.h>
 #include <stdlib.h>
+#include <string.h>
 #include "engine.h"
 #include "tetrominos.h"
 
@@ -113,13 +114,9 @@ void add_tet_to_board(Game *game) {
 
 void clear_line(int y, Game *game) {
   for(int i = y; i > 0; i--) {
-    for(int x = 0; x < game->board->w; x++) {
-      game->board->data[x + (i * game->board->w)] = game->board->data[x + ((i - 1) * game->board->w)];
-    }
+    memcpy(&game->board->data[i * game->board->w], &game->board->data[(i - 1) * game->board->w], game->board->w);
   }
-  for(int x = 0; x < game->board->w; x++) {
-    game->board->data[x] = false;
-  }
+  memset(&game->board->data[0], 0, game->board->w);
   game->score += LINE_PTS;
 }
 
