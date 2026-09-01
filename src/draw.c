@@ -75,26 +75,23 @@ void draw_game_over(const Game *game) {
 
 }
 
-void draw_static_ui(const Game *game) {
-  int next_tet_x = game->board->x + game->board->w * SCALE + 5;
-  int next_tet_y = 3;
-  dtext(next_tet_x, next_tet_y, C_BLACK, "next:");
-
-  int score_x = 5;
-  int score_y = 3;
-  dtext(score_x, score_y, C_BLACK, "score:");
-}
-
-
 void draw_ui(const Game *game) {
   int next_tet_x = game->board->x + game->board->w * SCALE + 5;
   int next_tet_y = 3;
+  dtext(next_tet_x, next_tet_y, C_BLACK, "next:");
   dimage(next_tet_x + 2, next_tet_y + 7, tetrominos[game->next_tet].img);
 
   int score_x = 5;
   int score_y = 3;
+  dtext(score_x, score_y, C_BLACK, "score:");
   drect(score_x + 2, score_y + 7, game->board->x - 2, score_y + 20, C_WHITE);
   dprint(score_x + 2, score_y + 7, C_BLACK, "%d", game->score);
+
+  int level_x = 5;
+  int level_y = 33;
+  dtext(level_x, level_y, C_BLACK, "level:");
+  drect(level_x + 2, level_y + 7, game->board->x - 2, level_y + 20, C_WHITE);
+  dprint(level_x + 2, level_y + 7, C_BLACK, "%d", game->level);
 }
 
 void draw_menu() {

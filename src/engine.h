@@ -23,6 +23,7 @@
 
 #define SCALE 3
 
+#define TETRIS_PTS 100
 #define LINE_PTS 10
 
 
@@ -49,6 +50,7 @@ typedef struct {
   int next_tet;
   Board *board;
   int level;
+  int lines_cleared;
 } Game;
 
 

@@ -57,19 +57,20 @@ static void start_game() {
     .y = (SCREEN_HEIGHT / 2) - (20 / 2 * SCALE)
   };
   bool data[board.w * (board.h + UPPER_PADDING)];
-  memset(data, 0, board.w * (board.h + UPPER_PADDING)); // clear board
+  memset(data, false, board.w * (board.h + UPPER_PADDING)); // clear board
   board.data = data;
 
   Tet curr_tet;
   Game game = {
     .alive = true,
     .score = 0,
-    .drop_duration = 400,
+    .drop_duration = 750,
     .next_tet = get_random_tet(),
 
     .board = &board,
     .curr_tet = &curr_tet,
     .level = 1,
+    .lines_cleared = 0,
   };
 
   spawn_next_tet(&game);
@@ -79,7 +80,6 @@ static void start_game() {
   dclear(C_WHITE);
   draw_board_borders(&board);
   draw_board(&board, &curr_tet);
-  draw_static_ui(&game);
   draw_ui(&game);
   dupdate();
 

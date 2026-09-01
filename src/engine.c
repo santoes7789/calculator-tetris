@@ -1,6 +1,7 @@
 #include <gint/display.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "engine.h"
 #include "tetrominos.h"
 
@@ -47,7 +48,7 @@ void spawn_next_tet(Game *game) {
   game->curr_tet->y = y_spawn;
   game->curr_tet->x = x_spawn;
   game->curr_tet->rotation = 0;
-
+  game->curr_tet->drop_duration = game->drop_duration;
   game->next_tet = get_random_tet();
 
   if(check_collision(game->curr_tet, game->board, 0, 0, 0)){
@@ -116,12 +117,12 @@ void clear_line(int y, Game *game) {
   for(int i = y; i > 0; i--) {
     memcpy(&game->board->data[i * game->board->w], &game->board->data[(i - 1) * game->board->w], game->board->w);
   }
-  memset(&game->board->data[0], 0, game->board->w);
-  game->score += LINE_PTS;
+  memset(&game->board->data[0], false, game->board->w);
 }
 
 // Checks for lines that are full and clears them.
 void clear_full_lines(Game *game) {
+  int lines_cleared = 0;
   for(int y = 0; y < game->board->h + UPPER_PADDING; y++) {
     bool clear = true;
     for(int x = 0; x < game->board->w; x++) {
@@ -133,7 +134,21 @@ void clear_full_lines(Game *game) {
 
     if(clear) {
       clear_line(y, game);
+      game->score += LINE_PTS;
+      game->lines_cleared++;
+      lines_cleared++;
+
+      if(game->lines_cleared % 10 == 0) {
+        game->level++;
+        game->drop_duration = 675 * pow(0.6, game->level) + 75;
+      }
     }
+  }
+
+  if (lines_cleared == 4) {
+    game->score += TETRIS_PTS;
+  } else {
+    game->score += LINE_PTS * lines_cleared;
   }
 }
 
@@ -157,6 +172,7 @@ bool move_tet(Game *game, int dir) {
 void hard_drop(Game *game) {
   int count = 0;
   while(move_tet(game, ACTION_DOWN)){
+    count++;
     //Break if it reaches infinite loop
     if(count > game->board->h*2) {
       break;
