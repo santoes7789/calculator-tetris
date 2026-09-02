@@ -5,6 +5,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "engine.h"
 #include "draw.h"
 
@@ -13,8 +14,8 @@ static int callback_tick(volatile int *tick);
 
 static void start_game();
 
-static void game_loop(Game *game);
-static void on_piece_drop(Game *game);
+static void game_loop();
+static void on_piece_drop();
 
 static volatile int tick = 1;
 
@@ -63,15 +64,12 @@ int main()
     tick = 0;
 
     if(game.state == GAME) {
-
-      game_loop(&game);
+      game_loop();
     } else if(game.state == MENU) {
       draw_menu();
       flashingText -= ENGINE_TICK;
 
       key_event_t ev = getkey_opt(GETKEY_DEFAULT, &timeout);
-      if (ev.type != KEYEV_NONE)
-        start_game();
 
       if(flashingText <= 0) {
         draw_menu_flashing_text(showFlashingText);
@@ -79,6 +77,8 @@ int main()
         flashingText = 500;
         dupdate();
       }
+      if (ev.type != KEYEV_NONE)
+        start_game();
 
     }
   }
@@ -111,20 +111,19 @@ static void start_game() {
   draw_board(&board, &curr_tet);
   draw_ui(&game);
   dupdate();
-
   game.state = GAME;
 }
 
-static void game_loop(Game *game) {
-  if(!game->alive) {
-    draw_game_over(game);
+static void game_loop() {
+  if(!game.alive) {
+    draw_game_over(&game);
     dupdate();
 
     sleep_ms(1500);
     clearevents();
     getkey();
 
-    game->state = MENU;
+    game.state = MENU;
     return;
   }
   // Get user input
@@ -132,34 +131,55 @@ static void game_loop(Game *game) {
 
   //Movement
   if (dir >= ACTION_DOWN && dir <= ACTION_LEFT) {
-    move_tet(game, dir);
+    move_tet(&game, dir);
 
   }
   if (dir == ACTION_ROTATE) {
-    rotate_tet(game);
+    rotate_tet(&game);
   }
 
   if (dir == ACTION_HARDDROP) {
-    hard_drop(game);
-    on_piece_drop(game); // instantly cause piece to drop
+    hard_drop(&game);
+    on_piece_drop(); // instantly cause piece to drop
   }
 
-  bool hit = apply_gravity(game);
+  bool hit = apply_gravity(&game);
 
   if(!hit){
-    on_piece_drop(game);
+    on_piece_drop();
   }
 
   // Update screen
-  draw_board(game->board, game->curr_tet);
+  draw_board(game.board, game.curr_tet);
   dupdate();
 }
 
+static void on_piece_drop() {
+  add_tet_to_board(&game);
+  int lines_cleared = clear_full_lines(&game);
 
-static void on_piece_drop(Game *game) {
-  add_tet_to_board(game);
-  spawn_next_tet(game);
-  draw_ui(game);
+  // Scoring
+  if (lines_cleared > 0) {
+    game.lines_cleared += lines_cleared;
+    game.score += LINE_PTS * lines_cleared;
+
+    if (lines_cleared == 4) {
+      game.score += TETRIS_PTS;
+    } else if (lines_cleared > 1) {
+      game.score += LINE_PTS * lines_cleared;
+    }
+
+    if (game.lines_cleared >= game.level * LINES_PER_LEVEL) {
+      game.level++;
+      game.drop_duration = 675 * pow(0.6, game.level) + 75;
+
+      level_up_animation(game.level, &tick);
+      redraw_game(&game);
+    }
+  }
+
+  spawn_next_tet(&game);
+  draw_ui(&game);
 }
 
 static int get_inputs(void) {

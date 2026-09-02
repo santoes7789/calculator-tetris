@@ -26,6 +26,8 @@
 #define TETRIS_PTS 100
 #define LINE_PTS 10
 
+#define LINES_PER_LEVEL 10
+
 typedef enum {
     MENU,
     GAME,
@@ -70,5 +72,5 @@ void rotate_tet(Game *game);
 void hard_drop(Game *game);
 bool apply_gravity(Game *game);
 
-void clear_full_lines(Game *game);
+int clear_full_lines(Game *game);
 #endif /* _TETRIS_ENGINE_H */

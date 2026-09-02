@@ -1,7 +1,6 @@
 #include <gint/display.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 #include "engine.h"
 #include "tetrominos.h"
 
@@ -110,7 +109,6 @@ void add_tet_to_board(Game *game) {
       index++;
     }
   }
-  clear_full_lines(game);
 }
 
 void clear_line(int y, Game *game) {
@@ -121,7 +119,7 @@ void clear_line(int y, Game *game) {
 }
 
 // Checks for lines that are full and clears them.
-void clear_full_lines(Game *game) {
+int clear_full_lines(Game *game) {
   int lines_cleared = 0;
   for(int y = 0; y < game->board->h + UPPER_PADDING; y++) {
     bool clear = true;
@@ -131,25 +129,13 @@ void clear_full_lines(Game *game) {
         break;
       }
     }
-
     if(clear) {
       clear_line(y, game);
-      game->score += LINE_PTS;
-      game->lines_cleared++;
       lines_cleared++;
-
-      if(game->lines_cleared % 10 == 0) {
-        game->level++;
-        game->drop_duration = 675 * pow(0.6, game->level) + 75;
-      }
     }
   }
 
-  if (lines_cleared == 4) {
-    game->score += TETRIS_PTS;
-  } else {
-    game->score += LINE_PTS * lines_cleared;
-  }
+  return lines_cleared;
 }
 
 // returns false if tet has hit the ground

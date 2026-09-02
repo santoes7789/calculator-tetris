@@ -1,4 +1,5 @@
 #include <gint/display.h>
+#include <gint/clock.h>
 #include "draw.h"
 #include "engine.h"
 
@@ -108,4 +109,25 @@ void draw_menu_flashing_text(bool show) {
     dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 12, C_WHITE, C_WHITE, DTEXT_CENTER, DTEXT_MIDDLE, "Press any key");
     dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 22, C_WHITE, C_WHITE, DTEXT_CENTER, DTEXT_MIDDLE, "to start!");
   }
+}
+
+void level_up_animation(int level, volatile int *tick) {
+  int blackX = -SCREEN_WIDTH * 2;
+  while(blackX < SCREEN_WIDTH) {
+    while (!*tick)
+      sleep();
+    *tick = 0;
+
+    blackX += 10;
+    dclear(C_WHITE);
+    drect(blackX, 0, blackX + (SCREEN_WIDTH * 2) - 1, SCREEN_HEIGHT - 1, C_BLACK);
+    dprint_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, C_WHITE, C_NONE, DTEXT_CENTER, DTEXT_MIDDLE, "LEVEL %d", level);
+    dupdate();
+  }
+}
+
+void redraw_game(const Game *game) {
+  draw_board_borders(game->board);
+  draw_board(game->board, game->curr_tet);
+  draw_ui(game);
 }

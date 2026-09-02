@@ -10,5 +10,7 @@ void draw_ui(const Game *game);
 void draw_menu_flashing_text(bool show);
 void draw_game_over();
 void draw_menu();
+void level_up_animation(int level, volatile int *tick);
+void redraw_game(const Game *game);
 
 #endif /* _DRAW_H_ */
