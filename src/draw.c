@@ -98,6 +98,14 @@ void draw_menu() {
   extern bopti_image_t img_title;
   dclear(C_WHITE);
   dimage(0, 0, &img_title);
-  dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 13, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_MIDDLE, "Press any key");
-  dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 23, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_MIDDLE, "to start!");
+}
+
+void draw_menu_flashing_text(bool show) {
+  if (show == true) {
+    dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 12, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_MIDDLE, "Press any key");
+    dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 22, C_BLACK, C_WHITE, DTEXT_CENTER, DTEXT_MIDDLE, "to start!");
+  } else {
+    dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 12, C_WHITE, C_WHITE, DTEXT_CENTER, DTEXT_MIDDLE, "Press any key");
+    dtext_opt(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 22, C_WHITE, C_WHITE, DTEXT_CENTER, DTEXT_MIDDLE, "to start!");
+  }
 }

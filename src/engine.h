@@ -26,6 +26,10 @@
 #define TETRIS_PTS 100
 #define LINE_PTS 10
 
+typedef enum {
+    MENU,
+    GAME,
+} GameState;
 
 typedef struct  {
   TetData tet;
@@ -51,6 +55,7 @@ typedef struct {
   Board *board;
   int level;
   int lines_cleared;
+  GameState state;
 } Game;
 
 
