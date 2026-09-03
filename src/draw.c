@@ -76,20 +76,34 @@ void draw_game_over(const Game *game) {
 
 }
 
-void draw_ui(const Game *game) {
+static int display_score = 0;
+int score_x = 5;
+int score_y = 3;
+void draw_score(const Game *game) {
+  display_score = game->score;
+  dtext(score_x, score_y, C_BLACK, "score:");
+  drect(score_x + 2, score_y + 7, game->board->x - 2, score_y + 20, C_WHITE);
+  dprint(score_x + 2, score_y + 7, C_BLACK, "%d", display_score);
+}
+
+void draw_update_score(const Game *game) {
+  if(display_score == game->score) return;
+
+  display_score += 1;
+  drect(score_x + 2, score_y + 7, game->board->x - 2, score_y + 20, C_WHITE);
+  dprint(score_x + 2, score_y + 7, C_BLACK, "%d", display_score);
+}
+
+void draw_next_tet(const Game*game) {
   int next_tet_x = game->board->x + game->board->w * SCALE + 5;
   int next_tet_y = 3;
   dtext(next_tet_x, next_tet_y, C_BLACK, "next:");
   dimage(next_tet_x + 2, next_tet_y + 7, tetrominos[game->next_tet].img);
+}
 
-  int score_x = 5;
-  int score_y = 3;
-  dtext(score_x, score_y, C_BLACK, "score:");
-  drect(score_x + 2, score_y + 7, game->board->x - 2, score_y + 20, C_WHITE);
-  dprint(score_x + 2, score_y + 7, C_BLACK, "%d", game->score);
-
+void draw_level(const Game *game) {
   int level_x = 5;
-  int level_y = 33;
+  int level_y = 25;
   dtext(level_x, level_y, C_BLACK, "level:");
   drect(level_x + 2, level_y + 7, game->board->x - 2, level_y + 20, C_WHITE);
   dprint(level_x + 2, level_y + 7, C_BLACK, "%d", game->level);
@@ -126,8 +140,10 @@ void level_up_animation(int level, volatile int *tick) {
   }
 }
 
-void redraw_game(const Game *game) {
+void draw_full_screen(const Game *game) {
   draw_board_borders(game->board);
   draw_board(game->board, game->curr_tet);
-  draw_ui(game);
+  draw_score(game);
+  draw_next_tet(game);
+  draw_level(game);
 }

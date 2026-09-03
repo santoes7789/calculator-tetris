@@ -107,9 +107,7 @@ static void start_game() {
 
   // Draw initial stuff
   dclear(C_WHITE);
-  draw_board_borders(&board);
-  draw_board(&board, &curr_tet);
-  draw_ui(&game);
+  draw_full_screen(&game);
   dupdate();
   game.state = GAME;
 }
@@ -151,6 +149,7 @@ static void game_loop() {
 
   // Update screen
   draw_board(game.board, game.curr_tet);
+  draw_update_score(&game);
   dupdate();
 }
 
@@ -174,12 +173,13 @@ static void on_piece_drop() {
       game.drop_duration = 675 * pow(0.6, game.level) + 75;
 
       level_up_animation(game.level, &tick);
-      redraw_game(&game);
+      draw_full_screen(&game);
     }
   }
 
   spawn_next_tet(&game);
-  draw_ui(&game);
+  draw_next_tet(&game);
+  draw_level(&game);
 }
 
 static int get_inputs(void) {
