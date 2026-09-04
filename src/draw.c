@@ -86,6 +86,14 @@ void draw_score(const Game *game) {
   dprint(score_x + 2, score_y + 7, C_BLACK, "%d", display_score);
 }
 
+int high_score_x = 5;
+int high_score_y = 43;
+void draw_high_score(const Game *game) {
+  dtext(high_score_x, high_score_y, C_BLACK, "best:");
+  drect(high_score_x + 2, high_score_y + 7, game->board->x - 2, high_score_y + 20, C_WHITE);
+  dprint(high_score_x + 2, high_score_y + 7, C_BLACK, "%d", game->high_score);
+}
+
 void draw_update_score(const Game *game) {
   if(display_score == game->score) return;
 
@@ -103,7 +111,7 @@ void draw_next_tet(const Game*game) {
 
 void draw_level(const Game *game) {
   int level_x = 5;
-  int level_y = 25;
+  int level_y = 23;
   dtext(level_x, level_y, C_BLACK, "level:");
   drect(level_x + 2, level_y + 7, game->board->x - 2, level_y + 20, C_WHITE);
   dprint(level_x + 2, level_y + 7, C_BLACK, "%d", game->level);
@@ -146,4 +154,5 @@ void draw_full_screen(const Game *game) {
   draw_score(game);
   draw_next_tet(game);
   draw_level(game);
+  draw_high_score(game);
 }

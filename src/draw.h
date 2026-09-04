@@ -8,6 +8,7 @@ void draw_board(const Board *board, const Tet *tet);
 void draw_board_borders(const Board *board);
 void draw_score(const Game *game);
 void draw_update_score(const Game *game);
+void draw_high_score(const Game *game);
 void draw_next_tet(const Game*game);
 void draw_level(const Game *game);
 void draw_menu_flashing_text(bool show);

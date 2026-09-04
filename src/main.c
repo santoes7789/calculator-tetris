@@ -1,4 +1,5 @@
 #include <gint/display.h>
+#include <gint/gint.h>
 #include <gint/keyboard.h>
 #include <gint/timer.h>
 #include <gint/clock.h>
@@ -8,6 +9,7 @@
 #include <math.h>
 #include "engine.h"
 #include "draw.h"
+#include "file.h"
 
 static int get_inputs();
 static int callback_tick(volatile int *tick);
@@ -94,14 +96,15 @@ static void start_game() {
   memset(data, false, board.w * (board.h + UPPER_PADDING)); // clear board
   board.data = data;
 
-  game.alive = true,
-  game.score = 0,
-  game.drop_duration = 750,
-  game.next_tet = get_random_tet(),
-  game.board = &board,
-  game.curr_tet = &curr_tet,
-  game.level = 1,
-  game.lines_cleared = 0,
+  game.alive = true;
+  game.score = 0;
+  game.drop_duration = 750;
+  game.next_tet = get_random_tet();
+  game.board = &board;
+  game.curr_tet = &curr_tet;
+  game.level = 1;
+  game.lines_cleared = 0;
+  game.high_score = gint_world_switch(GINT_CALL(load_highscore));
 
   spawn_next_tet(&game);
 
@@ -116,6 +119,12 @@ static void game_loop() {
   if(!game.alive) {
     draw_game_over(&game);
     dupdate();
+
+    if (game.score > game.high_score) {
+      gint_world_switch(GINT_CALL(save_highscore, game.score));
+      game.high_score = game.score;
+    }
+
 
     sleep_ms(1500);
     clearevents();

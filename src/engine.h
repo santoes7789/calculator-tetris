@@ -58,6 +58,7 @@ typedef struct {
   int level;
   int lines_cleared;
   GameState state;
+  int high_score;
 } Game;
 
 
